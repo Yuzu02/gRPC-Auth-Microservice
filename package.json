@@ -1,5 +1,5 @@
 {
-  "name": "Example-gRPC-Auth",
+  "name": "example-grpc-auth-microservice",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -14,8 +14,7 @@
     "start:prod": "node dist/apps/Example-gRPC-Auth/main",
     "start:auth": "nest start Example-gRPC-Auth --watch",
     "start:api": "nest start api_gateway --watch",
-    "start:all": "concurrently \"npm run start:auth\" \"npm run start:api\"",
-    "start:fixed": "concurrently \"nest start Example-gRPC-Auth --watch\" \"nest start api_gateway --watch\"",
+    "start:all": "concurrently \"nest start Example-gRPC-Auth --watch\" \"nest start api_gateway --watch\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",

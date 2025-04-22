@@ -12,8 +12,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             ignoreExpiration: false,
             passReqToCallback: false,
             secretOrKeyProvider: (request, rawJwtToken, done) => {
-                // En un entorno real, podrías obtener la clave de un servicio de secretos
-                // o un almacenamiento seguro
                 done(null, 'your-secret-key');
             },
         });
