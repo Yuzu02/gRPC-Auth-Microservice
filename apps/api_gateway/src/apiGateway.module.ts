@@ -20,7 +20,7 @@ import { ProtectedController } from './protected.controller';
         options: {
           package: 'auth',
           protoPath: join(process.cwd(), 'proto/auth.proto'),
-          url: 'localhost:50052', // Actualizado para conectarse al nuevo puerto del microservicio
+          url: 'localhost:50052', 
         },
       },
     ]),
