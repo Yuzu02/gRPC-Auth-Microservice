@@ -5,38 +5,36 @@ import { AuthService } from '../auth.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    options: any;
-    constructor(private readonly authService: AuthService) {
-        super({
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            ignoreExpiration: false,
-            passReqToCallback: false,
-            secretOrKeyProvider: (request, rawJwtToken, done) => {
-                done(null, 'your-secret-key');
-            },
-        });
+  constructor(private readonly authService: AuthService) {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      passReqToCallback: true, 
+      secretOrKeyProvider: (request, rawJwtToken, done) => {
+        done(null, 'your-secret-key');
+      },
+    });
+  }
+
+  // Modified validate to receive request as first parameter
+  async validate(request: any, payload: any) {
+    // Extract token from request headers
+    const token = ExtractJwt.fromAuthHeaderAsBearerToken()(request);
+    if (!token) {
+      throw new UnauthorizedException('No token provided');
     }
 
-    async validate(payload: any) {
-        // La validación la delegamos al microservicio de autenticación
-        // Esto es importante para evitar asumir que el token es válido solo porque
-        // la firma sea correcta
-        const token = ExtractJwt.fromAuthHeaderAsBearerToken()(this.options.request);
-        if (!token) {
-            throw new UnauthorizedException('No token provided');
-        }
-        
-        const validation = await this.authService.validateToken(token);
+    const validation = await this.authService.validateToken(token);
 
-        if (!validation.valid) {
-            throw new UnauthorizedException();
-        }
-
-        // Devolvemos el usuario para que Passport lo adjunte al objeto request
-        return {
-            userId: validation.userId,
-            roles: validation.roles,
-            permissions: validation.permissions,
-        };
+    if (!validation.valid) {
+      throw new UnauthorizedException();
     }
+
+    // Devolvemos el usuario para que Passport lo adjunte al objeto request
+    return {
+      userId: validation.userId,
+      roles: validation.roles,
+      permissions: validation.permissions,
+    };
+  }
 }
